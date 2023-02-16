@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InitializeService } from './services/initialize.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'siscacc';
+
+  constructor( private initService: InitializeService){
+    this.initService.initializeApp();
+  }
 }
