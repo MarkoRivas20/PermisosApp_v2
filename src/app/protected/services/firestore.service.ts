@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { collection, getDocs, doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
-import { User } from 'src/app/interface/interface';
+import { Request, User } from 'src/app/interface/interface';
 import { InitializeService } from 'src/app/services/initialize.service';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -36,6 +36,25 @@ export class FirestoreService {
     });
 
     return users;
+  }
+
+  async getAllRequests(){
+
+    const requests: any[] = [];
+
+    const querySnapshot = await getDocs(collection(this.initService.db, "requests"));
+    querySnapshot.forEach((doc) => {
+
+      console.log(doc.id);
+
+      let request = Object.assign(doc.data(),{
+        id: doc.id
+      })
+
+      requests.push(request);
+    });
+
+    return requests;
   }
 
   async EditUser(uid:string, user: User, password?: string){
@@ -99,5 +118,59 @@ export class FirestoreService {
 
     }
 
+  }
+
+  async getRequest(id:string){
+
+    const docRef = doc(this.initService.db, "requests", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+
+      const request: Request = {
+        id:  docSnap.id,
+        tiObservation: docSnap.data()['tiObservation'],
+        ip: docSnap.data()['ip'],
+        computerName: docSnap.data()['computerName'],
+        internetJustification: docSnap.data()['internetJustification'],
+        email: docSnap.data()['email'],
+        typeComputer: docSnap.data()['typeComputer'],
+        office: docSnap.data()['office'],
+        accessSystem: docSnap.data()['accessSystem'],
+        uidUser: docSnap.data()['uidUser'],
+        typeContract: docSnap.data()['typeContract'],
+        accessInternet: docSnap.data()['accessInternet'],
+        applicantObservation: docSnap.data()['applicantObservation'],
+        job: docSnap.data()['job'],
+        document: docSnap.data()['document'],
+        accessSystemJustification: docSnap.data()['accessSystemJustification'],
+        location: docSnap.data()['location'],
+        cellphone: docSnap.data()['cellphone'],
+        systems: docSnap.data()['systems'],
+        name: docSnap.data()['name'],
+        date: docSnap.data()['date'],
+        status: docSnap.data()['status']
+      }
+
+      return request;
+
+    } else {
+
+      console.log("No such document!");
+      return {};
+
+    }
+
+  }
+
+  async updateDocument(document:string, id: string, newObject:any){
+
+      const Ref = doc(this.initService.db, document, id);
+
+      await updateDoc(Ref, newObject).then(() => {
+        console.log('Actualizacion Exitosa');
+      }).catch(() => {
+        console.log('Actualizacion Fallida');
+      });
   }
 }

@@ -32,13 +32,20 @@ export class AuthService {
   SignIn(email: string, password: string){
 
     signInWithEmailAndPassword(this.initService.auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
 
-        this.getData(userCredential.user.uid);
+        await this.getData(userCredential.user.uid);
 
         //this.verifyToken();
 
-        this.router.navigateByUrl('/protected/admin/users');
+        if (this._User.role == 'admin') {
+          this.router.navigateByUrl('/protected/admin/users');
+        }else{
+
+          this.router.navigateByUrl('/protected/user/requets');
+        }
+
+
 
       })
       .catch((error) => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { async, Observable } from 'rxjs';
 import { InitializeService } from '../services/initialize.service';
 import { onAuthStateChanged } from "firebase/auth";
 import { AuthService } from '../auth/services/auth.service';
@@ -19,10 +19,12 @@ export class AuthGuard implements CanActivate, CanLoad {
   canActivate(): Promise<boolean> | boolean  {
 
     return new Promise((resolve, reject) => {
-      this.initService.auth.onAuthStateChanged((user) => {
+      this.initService.auth.onAuthStateChanged(async (user) => {
         if (user) {
 
           this.authService.uid = user.uid;
+
+          await this.authService.getData(user.uid);
 
           resolve(true);
         } else {
@@ -36,10 +38,11 @@ export class AuthGuard implements CanActivate, CanLoad {
   canLoad(): Promise<boolean> | boolean {
 
     return new Promise((resolve, reject) => {
-      this.initService.auth.onAuthStateChanged((user) => {
+      this.initService.auth.onAuthStateChanged(async (user) => {
         if (user) {
 
           this.authService.uid = user.uid;
+          await this.authService.getData(user.uid);
 
           resolve(true);
         } else {

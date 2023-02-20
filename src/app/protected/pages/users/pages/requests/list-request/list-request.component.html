@@ -1,8 +1,8 @@
 
 
 <div class="flex justify-between mb-2">
-  <p class="text-2xl">Lista de Usuarios</p>
-  <button class="hover:duration-300 hover:ease-linear bg-blue-500 hover:bg-blue-500/80 rounded-md text-white px-4 mr-2" routerLink="/protected/admin/users/add">Nuevo Usuario</button>
+  <p class="text-2xl">Lista de Solicitudes</p>
+  <button class="hover:duration-300 hover:ease-linear bg-blue-500 hover:bg-blue-500/80 rounded-md text-white px-4 mr-2" routerLink="/protected/user/requests/add">Crear Nueva Solicitud</button>
 </div>
 <hr>
 <div class="flex flex-col rounded-md">
@@ -16,13 +16,13 @@
                 #
               </th>
               <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                Nombre
+                ID
               </th>
               <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-center">
-                Cargo
+                Fecha
               </th>
               <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-center">
-                Usuario
+                Estado
               </th>
               <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-center">
                 Acción
@@ -30,19 +30,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" *ngFor="let user of users; let i = index">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{i + 1}}</td>
+            <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" *ngFor="let request of requests; let i = index">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{i + 1}}
+              </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {{user.firstName +" "+ user.lastName}}
+                {{request.id}}
               </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
-                {{user.job}}
+                {{request.date}}
               </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
-                {{user.username}}
+                {{request.status}}
               </td>
               <td class="text-sm px-6 py-4 whitespace-nowrap text-center" >
-                <button class="hover:duration-300 hover:ease-linear bg-yellow-400 hover:bg-yellow-500 rounded-md text-gray-900 px-4 py-2 mr-2" [routerLink]="['/protected/admin/users/edit', user.uid]">Editar</button>
+                <button class="hover:duration-300 hover:ease-linear bg-blue-500 hover:bg-blue-500/80 rounded-md text-gray-900 px-4 py-2 mr-2" [routerLink]="['/protected/user/requests/edit', request.id]"><i class="fa-solid fa-eye text-white"></i></button>
                 <!--<button class="hover:duration-300 hover:ease-linear bg-red-500 hover:bg-red-600 rounded-md text-white px-4 py-2">Eliminar</button>-->
               </td>
             </tr>

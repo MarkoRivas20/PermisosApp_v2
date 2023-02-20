@@ -1,20 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RequestComponent } from './pages/request/request.component';
+import { ListRequestComponent } from './pages/requests/list-request/list-request.component';
+import { RequestComponent } from './pages/requests/request/request.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'requests',
     children: [
       {
-        path: 'request',
+        path: 'list',
+        component: ListRequestComponent
+      },
+      {
+        path: 'add',
+        component: RequestComponent
+      },
+      {
+        path: 'edit/:id',
         component: RequestComponent
       },
       {
         path: '**',
-        redirectTo: 'request'
+        redirectTo: 'list'
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'requests'
   }
 ];
 

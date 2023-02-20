@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RoleGuard } from '../guards/role.guard';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 
 const routes: Routes = [
@@ -9,13 +10,17 @@ const routes: Routes = [
     children: [
       {
         path: 'admin',
-        loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule)
+        loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
+        canActivate: [RoleGuard],
+        canLoad: [RoleGuard],
+        data: {roles: 'admin'}
       },
       {
-        path: 'users',
+        path: 'user',
         loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule),
-        //canActivate: [ValidarTokenGuard],
-        //canLoad: [ValidarTokenGuard]
+        canActivate: [RoleGuard],
+        canLoad: [RoleGuard],
+        data: {roles: 'user'}
       },
       {
         path: '**',

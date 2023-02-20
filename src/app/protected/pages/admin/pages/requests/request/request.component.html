@@ -1,0 +1,207 @@
+<div class="flex justify-between mb-2 items-center">
+  <span class="text-2xl">Solicitud para Actualización de Usuario y Acceso a Internet</span>
+  <div class="flex gap-2 items-center">
+    <span>Fecha:</span>
+    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight" type="text" value="{{dateNow}}" disabled>
+  </div>
+</div>
+<hr>
+<mat-stepper orientation="vertical" [linear]="false" #stepper class="mt-2">
+  <mat-step [stepControl]="profileForm" >
+    <form [formGroup]="profileForm">
+      <ng-template matStepLabel>Datos Personales</ng-template>
+
+      <p class="md:w-1/2">
+        <mat-form-field appearance="fill" class="w-full mt-2">
+          <mat-label>Nombre Completo</mat-label>
+          <input matInput placeholder="Nombres y Apellidos" formControlName="name" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>DNI</mat-label>
+          <input matInput placeholder="N° de Documento" formControlName="document" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Tipo de Contrato</mat-label>
+          <mat-select formControlName="typeContract" required>
+            <mat-option *ngFor="let typeContract of typeContracts" [value]="typeContract.value">
+              {{typeContract.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Cargo</mat-label>
+          <input matInput placeholder="Cargo" formControlName="job" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Celular</mat-label>
+          <input matInput placeholder="Número de Celular" formControlName="cellphone" required type="number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill"class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Correo Electronico Personal" formControlName="email" required type="email">
+        </mat-form-field>
+      </p>
+
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="officeInfoForm">
+    <form [formGroup]="officeInfoForm">
+      <ng-template matStepLabel>Información de Oficina</ng-template>
+
+      <p class="md:w-1/2">
+        <mat-form-field appearance="fill" class="w-full mt-2">
+          <mat-label>Ubicación</mat-label>
+          <mat-select formControlName="location" required>
+            <mat-option *ngFor="let location of locations" [value]="location.value">
+              {{location.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Unidad/Oficina/Área</mat-label>
+          <mat-select formControlName="office" required>
+            <mat-option *ngFor="let office of offices" [value]="office.value">
+              {{office.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+      </p>
+
+      <div>
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="observationForm">
+    <form [formGroup]="observationForm">
+      <ng-template matStepLabel>Observaciones</ng-template>
+
+      <p class="md:w-1/2">
+        <mat-form-field class="w-full mt-2">
+          <mat-label>Observaciones del Solicitante</mat-label>
+          <textarea matInput formControlName="applicantObservation"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Observaciones de Informática</mat-label>
+          <textarea matInput formControlName="tiObservation"></textarea>
+        </mat-form-field>
+      </p>
+
+      <div>
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="computerInfoForm" >
+    <form [formGroup]="computerInfoForm">
+      <ng-template matStepLabel>Datos de Equipo</ng-template>
+
+      <p class="md:w-1/2">
+        <mat-form-field appearance="fill" class="w-full mt-2">
+          <mat-label>Nombre de Equipo</mat-label>
+          <input matInput placeholder="Nombre de la Computadora" formControlName="computerName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>IP</mat-label>
+          <input matInput placeholder="Dirección IP" formControlName="ip" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Tipo de Equipo</mat-label>
+          <mat-select formControlName="typeComputer" required>
+            <mat-option *ngFor="let typeComputer of typesComputer" [value]="typeComputer.value">
+              {{typeComputer.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </p>
+
+      <div>
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="AccessSystemForm" >
+    <form [formGroup]="AccessSystemForm">
+      <ng-template matStepLabel>Acceso a Sistemas</ng-template>
+
+      <div class="md:w-1/2">
+        <mat-radio-group aria-label="Selecciona una opción" class="mt-2" formControlName="accessSystem">
+          <mat-radio-button value="false" color="primary">No requiero acceso a ningun sistema</mat-radio-button>
+          <mat-radio-button value="true" color="primary" >Si requiero acceso a los siguientes sistemas: </mat-radio-button>
+        </mat-radio-group>
+
+        <section class="ml-2" formGroupName="systems">
+          <mat-checkbox color="primary" formControlName="besterp">Besterp</mat-checkbox>
+        </section>
+
+        <mat-form-field class="w-full mt-2">
+          <mat-label>Justiticación de acceso a sistemas</mat-label>
+          <textarea matInput placeholder="Ingrese su justificación de acceso para los sistemas solicitados" formControlName="accessSystemJustification"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="InternetForm" >
+    <form [formGroup]="InternetForm">
+      <ng-template matStepLabel>Acceso a Internet</ng-template>
+
+      <p class="md:w-1/2">
+        <mat-radio-group aria-label="Selecciona una opción" class="w-full mt-2" formControlName="accessInternet">
+          <mat-radio-button value="0" color="primary">Sin Accesso</mat-radio-button><br>
+          <mat-radio-button value="1" color="primary">Basico</mat-radio-button><br>
+          <mat-radio-button value="2" color="primary">Intermedio</mat-radio-button><br>
+          <mat-radio-button value="3" color="primary">Total</mat-radio-button><br>
+          <mat-radio-button value="4" color="primary">Libre</mat-radio-button>
+        </mat-radio-group>
+
+        <mat-form-field class="w-full mt-2">
+          <mat-label>Justiticación de acceso a internet</mat-label>
+          <textarea matInput placeholder="Ingrese su justificación de acceso a internet" formControlName="internetJustification"></textarea>
+        </mat-form-field>
+      </p>
+
+      <div>
+        <button mat-button matStepperPrevious>Atras</button>
+        <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Hecho</ng-template>
+    <p>¡Bien hecho! Ya termino todos los pasos.</p>
+    <div>
+      <button mat-button matStepperPrevious>Atras</button>
+      <button mat-button (click)="update()">Enviar</button>
+    </div>
+  </mat-step>
+
+
+</mat-stepper>

@@ -21,11 +21,15 @@ export class NavbarComponent implements OnInit{
 
   constructor(private authService: AuthService){
 
+    this.prueba();
   }
 
   async ngOnInit(): Promise<void> {
 
-    await this.authService.getData(this.authService.uid);
+  }
+
+  async prueba(){
+    //await this.authService.getData(this.authService.uid);
 
     this.User = this.authService.User;
   }
