@@ -22,11 +22,19 @@ export class LoginComponent {
 
   }
 
-  login(){
+  async login(){
     const email = this.myForm.controls.username.value+"@siscap.com";
     const password = this.myForm.controls.password.value || "";
 
+
+
     this.authService.SignIn(email, password);
+
+  }
+
+  get loading(){
+
+    return this.authService._loading;
   }
 
 

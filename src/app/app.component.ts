@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthGuard } from './guards/auth.guard';
 import { InitializeService } from './services/initialize.service';
 
 @Component({
@@ -9,7 +10,12 @@ import { InitializeService } from './services/initialize.service';
 export class AppComponent {
   title = 'siscacc';
 
-  constructor( private initService: InitializeService){
+  get loader(){
+    return this.authGuard.loader$;
+  }
+
+  constructor( private initService: InitializeService,
+               private authGuard: AuthGuard){
     this.initService.initializeApp();
   }
 }

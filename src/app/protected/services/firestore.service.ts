@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-import { collection, getDocs, doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
+import { collection, getDocs, doc, setDoc, getDoc, updateDoc, addDoc} from "firebase/firestore";
 import { Request, User } from 'src/app/interface/interface';
 import { InitializeService } from 'src/app/services/initialize.service';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { SweetalertService } from './sweetalert.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-  constructor(private initService: InitializeService) { }
+  loading: boolean = false;
+
+  constructor(private initService: InitializeService,
+              private sweetAlertService: SweetalertService,
+              private router: Router) { }
 
   async getAllUsers(){
 
@@ -57,11 +63,9 @@ export class FirestoreService {
     return requests;
   }
 
-  async EditUser(uid:string, user: User, password?: string){
+  async EditUser(uid:string, user: User){
 
-    if(password){
-
-    }
+    this.loading = true;
 
     const userRef = doc(this.initService.db, "users", uid);
 
@@ -72,23 +76,66 @@ export class FirestoreService {
       document: user.document,
     }).then(() => {
       console.log('Actualizado correctamente');
+
+      this.sweetAlertService.Toast.fire({
+        icon: 'success',
+        title: 'Actualizado correctamente'
+      })
+
+      this.loading = false;
+
     }).catch(() => {
       console.log('Error al actualizar');
+
+      this.sweetAlertService.Toast.fire({
+        icon: 'error',
+        title: 'Actualización fallida'
+      })
+
+      this.loading = false;
     });
 
   }
 
   saveUser(user: User, email:string, password: string){
 
+    this.loading = true;
+
     createUserWithEmailAndPassword(this.initService.auth, email, password).then(async (userCredential) => {
 
-      await setDoc(doc(this.initService.db, "users", userCredential.user.uid), user);
+      await setDoc(doc(this.initService.db, "users", userCredential.user.uid), user).then((resp) => {
+
+        this.sweetAlertService.Toast.fire({
+          icon: 'success',
+          title: 'Creado correctamente'
+        })
+
+        this.loading = false;
+
+        this.router.navigateByUrl('/protected/admin/users/list');
+
+      }).catch((error) => {
+
+        this.sweetAlertService.Toast.fire({
+          icon: 'error',
+          title: 'Creación Fallida'
+        })
+
+        this.loading = false;
+
+      });
 
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorMessage);
+      this.sweetAlertService.Toast.fire({
+        icon: 'error',
+        title: 'Creación Fallida'
+      })
+
+      this.loading = false;
     });
   }
 
@@ -114,6 +161,10 @@ export class FirestoreService {
     } else {
 
       console.log("No such document!");
+      this.sweetAlertService.Toast.fire({
+        icon: 'error',
+        title: 'Error al obtener el usuario'
+      })
       return {};
 
     }
@@ -129,6 +180,7 @@ export class FirestoreService {
 
       const request: Request = {
         id:  docSnap.id,
+        code: docSnap.data()['code'],
         tiObservation: docSnap.data()['tiObservation'],
         ip: docSnap.data()['ip'],
         computerName: docSnap.data()['computerName'],
@@ -157,6 +209,10 @@ export class FirestoreService {
     } else {
 
       console.log("No such document!");
+      this.sweetAlertService.Toast.fire({
+        icon: 'error',
+        title: 'Error al obtener el usuario'
+      })
       return {};
 
     }
@@ -165,12 +221,55 @@ export class FirestoreService {
 
   async updateDocument(document:string, id: string, newObject:any){
 
+    this.loading = true;
+
       const Ref = doc(this.initService.db, document, id);
 
       await updateDoc(Ref, newObject).then(() => {
-        console.log('Actualizacion Exitosa');
+
+        this.sweetAlertService.Toast.fire({
+          icon: 'success',
+          title: 'Actualizado correctamente'
+        })
+
+        this.loading = false;
       }).catch(() => {
-        console.log('Actualizacion Fallida');
+
+        this.sweetAlertService.Toast.fire({
+          icon: 'error',
+          title: 'Actualización fallida'
+        })
+
+        this.loading = false;
       });
+  }
+
+  async saveDocument(document:string, newObject:any){
+
+    this.loading = true;
+
+    await addDoc(collection(this.initService.db, document), newObject).then((docRef) => {
+
+      this.sweetAlertService.Toast.fire({
+        icon: 'success',
+        title: 'Guardado correctamente'
+      })
+
+      this.loading = false;
+
+      //this.router.navigateByUrl('/protected/user/requests/list');
+
+    }).catch((error) => {
+
+      this.sweetAlertService.Toast.fire({
+        icon: 'error',
+        title: 'Error al guardar la información'
+      })
+
+      this.loading = false;
+
+    });
+
+
   }
 }

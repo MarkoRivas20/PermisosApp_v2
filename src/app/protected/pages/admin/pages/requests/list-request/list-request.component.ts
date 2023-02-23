@@ -12,6 +12,7 @@ import { InitializeService } from 'src/app/services/initialize.service';
 export class ListRequestComponent implements OnInit{
 
   requests: any[] = [];
+  loading: boolean = true;
 
   constructor(private initService: InitializeService,
               private authService: AuthService,
@@ -24,6 +25,8 @@ export class ListRequestComponent implements OnInit{
 
 
       this.requests = resp;
+
+      this.loading = false;
 
     }).catch((error) => {
 

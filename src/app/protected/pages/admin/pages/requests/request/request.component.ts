@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FirestoreService } from 'src/app/protected/services/firestore.service';
+import { PdfService } from 'src/app/protected/services/pdf.service';
 import { InitializeService } from 'src/app/services/initialize.service';
 
 @Component({
@@ -18,6 +19,13 @@ export class RequestComponent implements OnInit{
   dateNow: string = "";
   enabled: boolean = true;
   status: string = "";
+  loading: boolean = true;
+  Request: any = {};
+
+  get loadingButton(){
+
+    return this.fireService.loading;
+  }
 
   profileForm = this._formBuilder.group({
     name: [null, Validators.required],
@@ -34,8 +42,8 @@ export class RequestComponent implements OnInit{
   });
 
   observationForm = this._formBuilder.group({
-    applicantObservation: [null, Validators.required],
-    tiObservation: [null, Validators.required],
+    applicantObservation: [null],
+    tiObservation: [null],
   });
 
   computerInfoForm = this._formBuilder.group({
@@ -49,7 +57,7 @@ export class RequestComponent implements OnInit{
     systems: this._formBuilder.group({
       besterp: [false]
     }),
-    accessSystemJustification: [null, Validators.required],
+    accessSystemJustification: [null],
   });
 
   InternetForm = this._formBuilder.group({
@@ -57,40 +65,97 @@ export class RequestComponent implements OnInit{
     internetJustification: [null, Validators.required],
   });
 
-  locations = [
-    {value: 'Arequipa', viewValue: 'Agencia de Arequipa'},
-    {value: 'Cuajone', viewValue: 'Agencia de Cuajone'},
-    {value: 'Ilo', viewValue: 'Agencia de Ilo'},
-    {value: 'Moquegua', viewValue: 'Agencia de Moquegua'},
-    {value: 'Tacna', viewValue: 'Agencia de Tacna'},
+  offices = [
+        {value: 'Riesgos', viewValue: 'Subgerencia de Riesgos'},
+        {value: 'Recuperaciones', viewValue: 'Subgerencia de Recuperaciones'},
+        {value: 'Contabilidad', viewValue: 'Contabilidad'},
+        {value: 'Operaciones', viewValue: 'Subgerencia de Operaciones'},
+        {value: 'Negocios', viewValue: 'Subgerencia de Negocios'},
+        {value: 'Logística', viewValue: 'Logística'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'},
+        {value: 'Legal', viewValue: 'Asesoría Legal'},
+        {value: 'Mesa', viewValue: 'Mesa de Partes'},
+        {value: 'Auditoría', viewValue: 'Auditoría'},
+        {value: 'Seguros', viewValue: 'Seguros'},
+        {value: 'RRHH', viewValue: 'Recursos Humanos'},
+        {value: 'Informática', viewValue: 'Subgerencia de Informática'},
+        {value: 'Consejo', viewValue: 'Consejo de Administración'},
+        {value: 'Comite', viewValue: 'Comité de Educación'},
+        {value: 'Cumplimiento', viewValue: 'Oficial de Cumplimiento'},
+        {value: 'Administración', viewValue: 'Administración'},
+        {value: 'Gerencia', viewValue: 'Gerencia General'}
+  ];
+
+  locations: Array<any> = [
+    {
+      value: 'Arequipa',
+      viewValue: 'Agencia de Arequipa',
+      offices: [
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'}
+      ]
+    },
+    {
+      value: 'Cuajone',
+      viewValue: 'Agencia de Cuajone',
+      offices: [
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'}
+      ]
+    },
+    {
+      value: 'Ilo',
+      viewValue: 'Agencia de Ilo',
+      offices: [
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'}
+      ]
+    },
+    {
+      value: 'Moquegua',
+      viewValue: 'Agencia de Moquegua',
+      offices: [
+        {value: 'Riesgos', viewValue: 'Subgerencia de Riesgos'},
+        {value: 'Recuperaciones', viewValue: 'Subgerencia de Recuperaciones'},
+        {value: 'Contabilidad', viewValue: 'Contabilidad'},
+        {value: 'Operaciones', viewValue: 'Subgerencia de Operaciones'},
+        {value: 'Negocios', viewValue: 'Subgerencia de Negocios'},
+        {value: 'Logística', viewValue: 'Logística'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'},
+        {value: 'Legal', viewValue: 'Asesoría Legal'},
+        {value: 'Mesa', viewValue: 'Mesa de Partes'},
+        {value: 'Auditoría', viewValue: 'Auditoría'},
+        {value: 'Seguros', viewValue: 'Seguros'},
+        {value: 'RRHH', viewValue: 'Recursos Humanos'},
+        {value: 'Informática', viewValue: 'Subgerencia de Informática'},
+        {value: 'Consejo', viewValue: 'Consejo de Administración'},
+        {value: 'Comite', viewValue: 'Comité de Educación'},
+        {value: 'Cumplimiento', viewValue: 'Oficial de Cumplimiento'},
+        {value: 'Administración', viewValue: 'Administración'},
+        {value: 'Gerencia', viewValue: 'Gerencia General'}
+      ]
+    },
+    {
+      value: 'Tacna',
+      viewValue: 'Agencia de Tacna',
+      offices: [
+        {value: 'Caja', viewValue: 'Caja'},
+        {value: 'Créditos', viewValue: 'Créditos'},
+        {value: 'Agencia', viewValue: 'Jefe de Agencia'}
+      ]
+    }
   ];
 
   typeContracts = [
     {value: 'planilla', viewValue: 'Planilla'},
     {value: 'servicios', viewValue: 'Servicios'}
-  ];
-
-  offices = [
-    {value: 'Riesgos', viewValue: 'Subgerencia de Riesgos'},
-    {value: 'Recuperaciones', viewValue: 'Subgerencia de Recuperaciones'},
-    {value: 'Contabilidad', viewValue: 'Contabilidad'},
-    {value: 'Operaciones', viewValue: 'Subgerencia de Operaciones'},
-    {value: 'Negocios', viewValue: 'Subgerencia de Negocios'},
-    {value: 'Logística', viewValue: 'Logística'},
-    {value: 'Créditos', viewValue: 'Créditos'},
-    {value: 'Caja', viewValue: 'Caja'},
-    {value: 'Agencia', viewValue: 'Jefe de Agencia'},
-    {value: 'Legal', viewValue: 'Asesoría Legal'},
-    {value: 'Mesa', viewValue: 'Mesa de Partes'},
-    {value: 'Auditoría', viewValue: 'Auditoría'},
-    {value: 'Seguros', viewValue: 'Seguros'},
-    {value: 'RRHH', viewValue: 'Recursos Humanos'},
-    {value: 'Informática', viewValue: 'Subgerencia de Informática'},
-    {value: 'Consejo', viewValue: 'Consejo de Administración'},
-    {value: 'Comite', viewValue: 'Comité de Educación'},
-    {value: 'Cumplimiento', viewValue: 'Oficial de Cumplimiento'},
-    {value: 'Administración', viewValue: 'Administración'},
-    {value: 'Gerencia', viewValue: 'Gerencia General'}
   ];
 
   typesComputer = [
@@ -99,11 +164,10 @@ export class RequestComponent implements OnInit{
   ];
 
   constructor(private _formBuilder: FormBuilder,
-    private initService: InitializeService,
-    private authService: AuthService,
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private fireService: FirestoreService) {}
+    private fireService: FirestoreService,
+    private pdfService: PdfService) {}
 
     ngOnInit(): void {
 
@@ -115,7 +179,7 @@ export class RequestComponent implements OnInit{
         this.activateRoute.params.pipe(switchMap(({id}) => this.fireService.getRequest(id))
         ).subscribe((request: any) => {
 
-          console.log(request);
+          this.Request = request;
 
           this.profileForm.disable();
           this.officeInfoForm.disable();
@@ -137,9 +201,14 @@ export class RequestComponent implements OnInit{
 
           this.id = request.id;
 
+          this.loading = false;
+
           //this.myForm.controls['username'].disable();
 
         })
+      }else{
+
+        this.loading = false;
       }
 
 
@@ -150,5 +219,10 @@ export class RequestComponent implements OnInit{
       this.fireService.updateDocument("requests",this.id,{
         tiObservation: this.observationForm.controls['tiObservation'].value
       });
+    }
+
+    generatePDF(){
+
+      this.pdfService.generatePdf(this.Request);
     }
 }

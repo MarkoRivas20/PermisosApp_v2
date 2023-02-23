@@ -9,7 +9,8 @@ export interface User{
 }
 
 export interface Request {
-  id?:                        string;
+  id?:                       string;
+  code:                      string;
   tiObservation:             string | null;
   ip:                        string;
   computerName:              string;

@@ -10,6 +10,8 @@ import { InitializeService } from 'src/app/services/initialize.service';
 })
 export class AuthService {
 
+  _loading: boolean = false;
+
   private _User: User = {
     uid: "",
     username: "",
@@ -31,6 +33,8 @@ export class AuthService {
 
   SignIn(email: string, password: string){
 
+    this._loading = true;
+
     signInWithEmailAndPassword(this.initService.auth, email, password)
       .then(async (userCredential) => {
 
@@ -46,12 +50,12 @@ export class AuthService {
         }
 
 
-
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
+        this._loading = false;
       });
   }
 
@@ -87,6 +91,7 @@ export class AuthService {
     this.initService.auth.signOut();
     this.router.navigateByUrl('/auth/login');
   }
+
 
 
 }

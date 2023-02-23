@@ -34,11 +34,23 @@
                       </div>
                       <input formControlName="password" class="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" type="password" placeholder="Ingrese su contraseña">
                   </div>
+
                   <div class="mt-10">
-                      <button class="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
-                      font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
-                      shadow-lg" (click)="login()">
+                      <button class=" text-gray-100 p-4 w-full rounded-full tracking-wide
+                      font-semibold font-display focus:outline-none focus:shadow-outline
+                      shadow-lg" (click)="login()" [disabled]="loading" [ngClass]="{'bg-gray-300/80' : loading, 'bg-indigo-500 hover:bg-indigo-600' : !loading}">
+                        <div
+                          *ngIf="loading else page"
+                          class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-gray-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                          role="status">
+                          <span
+                            class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                            >Cargando...</span
+                          >
+                        </div>
+                        <ng-template #page>
                           Ingresar
+                        </ng-template>
                       </button>
                   </div>
               </form>

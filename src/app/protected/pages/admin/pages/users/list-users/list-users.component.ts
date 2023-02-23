@@ -11,6 +11,7 @@ import { FirestoreService } from 'src/app/protected/services/firestore.service';
 export class ListUsersComponent implements OnInit{
 
   users: User[] = [];
+  loading: boolean = true;
 
   constructor(private fireService: FirestoreService,
               private authService: AuthService){
@@ -23,6 +24,7 @@ export class ListUsersComponent implements OnInit{
     this.fireService.getAllUsers().then((resp) => {
 
       this.users = resp;
+      this.loading = false;
 
     }).catch((error) => {
 

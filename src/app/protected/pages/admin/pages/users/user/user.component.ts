@@ -5,6 +5,7 @@ import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { User } from 'src/app/interface/interface';
 import { FirestoreService } from 'src/app/protected/services/firestore.service';
+import { SweetalertService } from 'src/app/protected/services/sweetalert.service';
 
 @Component({
   selector: 'app-user',
@@ -12,6 +13,13 @@ import { FirestoreService } from 'src/app/protected/services/firestore.service';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit{
+
+  loading: boolean = true;
+
+  get loadingButton(){
+
+    return this.fireService.loading;
+  }
 
   myForm = this.fb.group({
     firstName: [null, [Validators.required]],
@@ -34,7 +42,8 @@ export class UserComponent implements OnInit{
   constructor(private fb: FormBuilder,
               private fireService: FirestoreService,
               private router: Router,
-              private activateRoute: ActivatedRoute){
+              private activateRoute: ActivatedRoute,
+              private sweetalertService: SweetalertService){
 
   }
 
@@ -57,8 +66,14 @@ export class UserComponent implements OnInit{
         this.myForm.reset(user);
 
         this.myForm.controls['username'].disable();
+        this.myForm.controls['password'].removeValidators([Validators.required]);
+
+        this.loading = false;
 
       })
+    }else{
+
+      this.loading = false;
     }
 
   }
@@ -74,18 +89,26 @@ export class UserComponent implements OnInit{
       document: this.myForm.get('document')?.value!,
     }
 
-    if(this.user.uid){
+    if(this.myForm.valid && this.myForm.pristine){
+      if(this.user.uid){
 
-      this.fireService.EditUser(this.user.uid,user);
+        this.fireService.EditUser(this.user.uid, user);
 
+      }else{
+
+        this.fireService.saveUser(user, user.username+"@siscap.com", this.myForm.get('password')?.value!);
+
+      }
     }else{
 
-      this.fireService.saveUser(user, user.username+"@siscap.com", this.myForm.get('password')?.value!);
+      this.sweetalertService.Toast.fire({
+        icon: 'error',
+        title: 'Debe de completar todos los campos'
+      })
 
-      this.myForm.reset();
-
-      console.log('usuario guardado');
     }
+
+
 
 
 

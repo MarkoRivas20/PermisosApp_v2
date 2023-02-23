@@ -23,6 +23,7 @@ export class RoleGuard implements CanActivate, CanLoad {
 
       }else{
 
+        this.router.navigateByUrl('/protected/'+this.authService.User.role);
         return false;
       }
 
@@ -35,6 +36,7 @@ export class RoleGuard implements CanActivate, CanLoad {
 
     }else{
 
+      this.router.navigateByUrl('/protected/'+this.authService.User.role);
       return false;
     }
   }

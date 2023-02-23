@@ -14,6 +14,10 @@ import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ListRequestComponent } from './pages/requests/list-request/list-request.component';
 import { RequestComponent } from './pages/requests/request/request.component';
 
+import {NgxPrintModule} from 'ngx-print';
+
+
+
 @NgModule({
   declarations: [
     RequestComponent,
@@ -30,7 +34,8 @@ import { RequestComponent } from './pages/requests/request/request.component';
     MatRadioModule,
     MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPrintModule,
   ]
 })
 export class UsersModule { }
