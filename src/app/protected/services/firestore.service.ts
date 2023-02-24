@@ -19,8 +19,6 @@ export class FirestoreService {
 
   async getAllUsers(){
 
-    console.log(this.initService.auth.currentUser);
-
     const users: User[] = [];
 
     const querySnapshot = await getDocs(collection(this.initService.db, "users"));

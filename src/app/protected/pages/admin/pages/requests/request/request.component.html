@@ -208,26 +208,36 @@
         </form>
       </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel>Hecho</ng-template>
-        <p>¡Bien hecho! Ya termino todos los pasos.</p>
-        <div>
-          <button mat-button matStepperPrevious>Atras</button>
-          <button mat-raised-button color="primary" (click)="update()" class="w-12" [disabled]="loadingButton">
-            <div
-            *ngIf="loadingButton else page"
-            class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-gray-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status">
-            <span
-              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-              >Cargando...</span
-            >
+      <mat-step [stepControl]="StatustForm">
+        <form [formGroup]="StatustForm">
+          <ng-template matStepLabel>Estado</ng-template>
+          <mat-form-field appearance="fill" class="w-full mt-2">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status" required>
+              <mat-option *ngFor="let status of statuses" [value]="status.value">
+                {{status.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Atras</button>
+            <button mat-raised-button color="primary" (click)="update()" class="w-12" [disabled]="loadingButton">
+              <div
+              *ngIf="loadingButton else page"
+              class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-gray-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status">
+              <span
+                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                >Cargando...</span
+              >
+            </div>
+            <ng-template #page>
+              Enviar
+            </ng-template>
+            </button>
           </div>
-          <ng-template #page>
-            Enviar
-          </ng-template>
-          </button>
-        </div>
+        </form>
+
       </mat-step>
 
 

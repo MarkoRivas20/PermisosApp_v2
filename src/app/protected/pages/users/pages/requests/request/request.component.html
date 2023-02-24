@@ -8,11 +8,7 @@
 
     <div class="flex justify-between mb-2 items-center">
       <span class="text-2xl">Solicitud para Actualización de Usuario y Acceso a Internet</span>
-      <div class="flex" *ngIf="created">
-        <span>Estado:</span>
-        <span>{{status}}</span>
-      </div>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center" *ngIf="created">
         <span>Código:</span>
         <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-36 py-2 px-4 text-gray-700 leading-tight" type="text" value="{{Request.code}}" disabled>
 
@@ -21,6 +17,22 @@
         <span>Fecha:</span>
         <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-40 py-2 px-4 text-gray-700 leading-tight" type="text" value="{{dateNow}}" disabled>
         <button mat-raised-button color="primary" (click)="generatePDF()" *ngIf="created"><i class="fa-solid fa-download text-lg"></i></button>
+
+        <div *ngIf="created">
+
+          <div class="group flex relative items-center" *ngIf="(status == 'Pendiente') else approved">
+            <span class="rounded-md bg-yellow-500 shadow transition duration-200 ease-in-out hover:shadow-md hover:bg-yellow-500/90 h-9 w-16 flex items-center"><i class="fa-solid fa-clock text-lg text-white m-auto"></i></span>
+            <span class="group-hover:opacity-100 transition-opacity bg-gray-200 px-1 text-sm text-gray-700 rounded-md absolute opacity-0 mx-auto translate-y-9 -translate-x-1">Pendiente</span>
+          </div>
+
+          <ng-template #approved>
+
+            <div class="group flex relative items-center">
+              <span class="rounded-md bg-green-500 shadow transition duration-200 ease-in-out hover:shadow-md hover:bg-green-500/90 h-9 w-16 flex items-center"><i class="fa-solid fa-circle-check text-lg text-white m-auto"></i></span>
+              <span class="group-hover:opacity-100 transition-opacity bg-gray-200 px-1 text-sm text-gray-700 rounded-md absolute opacity-0 mx-auto translate-y-9 -translate-x-1">Aprobado</span>
+            </div>
+          </ng-template>
+        </div>
 
       </div>
     </div>

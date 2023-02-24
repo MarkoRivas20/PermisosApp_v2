@@ -1,1 +1,10 @@
-{}
+{
+  "hosting": {
+    "public": "dist/siscacc",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

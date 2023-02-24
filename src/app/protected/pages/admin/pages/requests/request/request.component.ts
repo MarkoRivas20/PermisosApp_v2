@@ -65,6 +65,15 @@ export class RequestComponent implements OnInit{
     internetJustification: [null, Validators.required],
   });
 
+  StatustForm = this._formBuilder.group({
+    status: ["Pendiente", Validators.required],
+  });
+
+  statuses = [
+    {value: 'Pendiente', viewValue: 'Pendiente'},
+    {value: 'Aprobado', viewValue: 'Aprobado'},
+  ];
+
   offices = [
         {value: 'Riesgos', viewValue: 'Subgerencia de Riesgos'},
         {value: 'Recuperaciones', viewValue: 'Subgerencia de Recuperaciones'},
@@ -194,6 +203,8 @@ export class RequestComponent implements OnInit{
           this.computerInfoForm.reset(request);
           this.AccessSystemForm.reset(request);
           this.InternetForm.reset(request);
+          this.StatustForm.reset(request);
+
 
           this.dateNow = request.date;
 
@@ -217,7 +228,8 @@ export class RequestComponent implements OnInit{
     update(){
 
       this.fireService.updateDocument("requests",this.id,{
-        tiObservation: this.observationForm.controls['tiObservation'].value
+        tiObservation: this.observationForm.controls['tiObservation'].value,
+        status: this.StatustForm.controls['status'].value
       });
     }
 

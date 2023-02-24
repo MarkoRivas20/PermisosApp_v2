@@ -49,6 +49,8 @@ export class AuthService {
           this.router.navigateByUrl('/protected/user/requets');
         }
 
+        this._loading = false;
+
 
       })
       .catch((error) => {

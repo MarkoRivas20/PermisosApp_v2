@@ -89,7 +89,7 @@ export class UserComponent implements OnInit{
       document: this.myForm.get('document')?.value!,
     }
 
-    if(this.myForm.valid && this.myForm.pristine){
+    if(this.myForm.valid){
       if(this.user.uid){
 
         this.fireService.EditUser(this.user.uid, user);
