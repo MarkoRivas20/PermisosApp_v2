@@ -16,13 +16,6 @@ const routes: Routes = [
         data: {roles: 'admin'}
       },
       {
-        path: 'user',
-        loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule),
-        canActivate: [RoleGuard],
-        canLoad: [RoleGuard],
-        data: {roles: 'user'}
-      },
-      {
         path: '**',
         redirectTo: ''
       }

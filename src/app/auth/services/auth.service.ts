@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { signInWithEmailAndPassword, deleteUser } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInAnonymously  } from 'firebase/auth';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { User } from 'src/app/interface/interface';
+import { SweetalertService } from 'src/app/protected/services/sweetalert.service';
 import { InitializeService } from 'src/app/services/initialize.service';
 
 @Injectable({
@@ -29,7 +30,8 @@ export class AuthService {
   }
 
   constructor(private initService: InitializeService,
-              private router: Router) { }
+              private router: Router,
+              private sweetService: SweetalertService) { }
 
   SignIn(email: string, password: string){
 
@@ -39,8 +41,6 @@ export class AuthService {
       .then(async (userCredential) => {
 
         await this.getData(userCredential.user.uid);
-
-        //this.verifyToken();
 
         if (this._User.role == 'admin') {
           this.router.navigateByUrl('/protected/admin/users');
@@ -58,8 +58,28 @@ export class AuthService {
         const errorMessage = error.message;
         console.log(errorMessage);
         this._loading = false;
+        this.sweetService.showError("Usuario o contraseña incorrectos");
       });
   }
+
+  SignInAnonimously(){
+
+    this._loading = true;
+
+    signInAnonymously(this.initService.auth)
+    .then(() => {
+
+      this._loading = false;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      this._loading = false;
+    });
+
+  }
+
 
   async getData(uid:string){
 
@@ -78,12 +98,15 @@ export class AuthService {
         document: docSnap.data()['document']
       };
 
-      console.log(this._User);
+
+      return true;
 
 
     } else {
 
       console.log("No such document!");
+
+      return false;
     }
 
   }

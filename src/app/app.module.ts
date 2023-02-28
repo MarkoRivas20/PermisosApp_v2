@@ -6,6 +6,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from "@angular/common/http";
+import { RequestComponent } from './public/request/request.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AngularMaterialModule } from './angular-material/angular-material.module';
 //import { provideAuth,getAuth } from '@angular/fire/auth';
 //import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
@@ -13,13 +16,16 @@ import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RequestComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    AngularMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

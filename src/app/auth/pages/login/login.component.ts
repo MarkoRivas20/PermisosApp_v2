@@ -37,16 +37,4 @@ export class LoginComponent {
     return this.authService._loading;
   }
 
-
-
-  /*verifyToken(){
-
-    this.initService.auth.currentUser?.getIdToken(true).then(function(idToken) {
-      console.log(idToken);
-    }).catch(function(error) {
-
-      console.log(error)
-    });
-
-  }*/
 }

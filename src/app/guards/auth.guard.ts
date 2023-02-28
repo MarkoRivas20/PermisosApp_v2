@@ -27,10 +27,18 @@ export class AuthGuard implements CanActivate, CanLoad {
 
           this.authService.uid = user.uid;
 
-          await this.authService.getData(user.uid);
-          this.loader$.next(false);
+          const access = await this.authService.getData(user.uid);
+          if(access){
+            this.loader$.next(false);
 
-          resolve(true);
+            resolve(true);
+          }
+          else{
+            this.router.navigateByUrl('/auth/login');
+          this.loader$.next(false);
+          resolve(false);
+          }
+
         } else {
           this.router.navigateByUrl('/auth/login');
           this.loader$.next(false);
@@ -49,8 +57,17 @@ export class AuthGuard implements CanActivate, CanLoad {
         if (user) {
 
           this.authService.uid = user.uid;
-          await this.authService.getData(user.uid);
-          resolve(true);
+          const access = await this.authService.getData(user.uid);
+          if(access){
+            this.loader$.next(false);
+
+            resolve(true);
+          }
+          else{
+            this.router.navigateByUrl('/auth/login');
+            this.loader$.next(false);
+            resolve(false);
+          }
         } else {
           this.router.navigateByUrl('/auth/login');
           this.loader$.next(false);

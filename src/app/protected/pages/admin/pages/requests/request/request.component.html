@@ -107,12 +107,13 @@
           <p class="md:w-1/2">
             <mat-form-field class="w-full mt-2">
               <mat-label>Observaciones del Solicitante</mat-label>
-              <textarea matInput formControlName="applicantObservation"></textarea>
+              <textarea matInput maxlength="256" formControlName="applicantObservation"></textarea>
             </mat-form-field>
 
             <mat-form-field class="w-full">
               <mat-label>Observaciones de Informática</mat-label>
-              <textarea matInput formControlName="tiObservation"></textarea>
+              <textarea matInput maxlength="256" #messageObservation formControlName="tiObservation"></textarea>
+              <mat-hint align="end">{{messageObservation.value.length}} / 256</mat-hint>
             </mat-form-field>
           </p>
 
@@ -166,12 +167,13 @@
             </mat-radio-group>
 
             <section class="ml-2" formGroupName="systems">
-              <mat-checkbox color="primary" formControlName="besterp">Besterp</mat-checkbox>
+              <mat-checkbox color="primary" formControlName="besterp">Besterp</mat-checkbox><br>
+              <mat-checkbox color="primary" formControlName="radar">Radar</mat-checkbox>
             </section>
 
             <mat-form-field class="w-full mt-2">
               <mat-label>Justiticación de acceso a sistemas</mat-label>
-              <textarea matInput placeholder="Ingrese su justificación de acceso para los sistemas solicitados" formControlName="accessSystemJustification"></textarea>
+              <textarea matInput maxlength="256" placeholder="Ingrese su justificación de acceso para los sistemas solicitados" formControlName="accessSystemJustification"></textarea>
             </mat-form-field>
           </div>
 
@@ -197,7 +199,7 @@
 
             <mat-form-field class="w-full mt-2">
               <mat-label>Justiticación de acceso a internet</mat-label>
-              <textarea matInput placeholder="Ingrese su justificación de acceso a internet" formControlName="internetJustification"></textarea>
+              <textarea matInput maxlength="256" placeholder="Ingrese su justificación de acceso a internet" formControlName="internetJustification"></textarea>
             </mat-form-field>
           </p>
 

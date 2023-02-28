@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PdfService } from './pdf.service';
 
@@ -7,7 +8,8 @@ import { PdfService } from './pdf.service';
 })
 export class SweetalertService {
 
-  constructor(private pdfService: PdfService) { }
+  constructor(private pdfService: PdfService,
+              private router: Router) { }
 
   Toast = Swal.mixin({
     toast: true,
@@ -27,7 +29,7 @@ export class SweetalertService {
       title: '<strong>¡Excelente!</strong>',
       icon: 'success',
       html:
-        'Su solicitud a sido registrada con exito ',
+        'Su solicitud a sido registrada con exito <br> <small>Si no se ha descargado el PDF haga click aqui</small>',
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
@@ -40,14 +42,22 @@ export class SweetalertService {
     }).then((result) => {
 
       if (result.isConfirmed) {
-        console.log('fire');
         this.pdfService.generatePdf(Request);
 
-      } else if (result.isDenied) {
-
-        Swal.fire('Changes are not saved', '', 'info')
+      }else {
+        //this.router.navigateByUrl('/');
+        location.reload();
       }
     });
   }
+
+  showError(messaje: string){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: messaje,
+    })
+  }
+
 
 }

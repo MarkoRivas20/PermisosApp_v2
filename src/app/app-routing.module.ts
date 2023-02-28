@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { RequestComponent } from './public/request/request.component';
 //import { ValidarTokenGuard } from './guards/validar-token.guard';
 
 const routes: Routes = [
+  {
+    path: 'request',
+    component: RequestComponent
+  },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)

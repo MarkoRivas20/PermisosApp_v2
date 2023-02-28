@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { collection, getDocs, doc, setDoc, getDoc, updateDoc, addDoc} from "firebase/firestore";
+import { collection, getDocs, doc, orderBy, getDoc, updateDoc, addDoc, query, serverTimestamp } from "firebase/firestore";
 import { Request, User } from 'src/app/interface/interface';
 import { InitializeService } from 'src/app/services/initialize.service';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { SweetalertService } from './sweetalert.service';
 import { Router } from '@angular/router';
+import { PdfService } from './pdf.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,41 +16,16 @@ export class FirestoreService {
 
   constructor(private initService: InitializeService,
               private sweetAlertService: SweetalertService,
-              private router: Router) { }
+              private pdfService: PdfService) { }
 
-  async getAllUsers(){
-
-    const users: User[] = [];
-
-    const querySnapshot = await getDocs(collection(this.initService.db, "users"));
-    querySnapshot.forEach((doc) => {
-
-      console.log(doc.id);
-
-      let user:User = {
-        uid: doc.id,
-        firstName: doc.data()['firstName'],
-        lastName: doc.data()['lastName'],
-        job: doc.data()['job'],
-        role: doc.data()['role'],
-        username: doc.data()['username'],
-        document: doc.data()['document'],
-      }
-
-      users.push(user);
-    });
-
-    return users;
-  }
 
   async getAllRequests(){
 
     const requests: any[] = [];
-
-    const querySnapshot = await getDocs(collection(this.initService.db, "requests"));
+    const requestRef = collection(this.initService.db, "requests");
+    const queryDB = query(requestRef, orderBy("timestamp", "desc"));
+    const querySnapshot = await getDocs(queryDB);
     querySnapshot.forEach((doc) => {
-
-      console.log(doc.id);
 
       let request = Object.assign(doc.data(),{
         id: doc.id
@@ -59,82 +35,6 @@ export class FirestoreService {
     });
 
     return requests;
-  }
-
-  async EditUser(uid:string, user: User){
-
-    this.loading = true;
-
-    const userRef = doc(this.initService.db, "users", uid);
-
-    await updateDoc(userRef, {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      job: user.job,
-      document: user.document,
-    }).then(() => {
-      console.log('Actualizado correctamente');
-
-      this.sweetAlertService.Toast.fire({
-        icon: 'success',
-        title: 'Actualizado correctamente'
-      })
-
-      this.loading = false;
-
-    }).catch(() => {
-      console.log('Error al actualizar');
-
-      this.sweetAlertService.Toast.fire({
-        icon: 'error',
-        title: 'Actualización fallida'
-      })
-
-      this.loading = false;
-    });
-
-  }
-
-  saveUser(user: User, email:string, password: string){
-
-    this.loading = true;
-
-    createUserWithEmailAndPassword(this.initService.auth, email, password).then(async (userCredential) => {
-
-      await setDoc(doc(this.initService.db, "users", userCredential.user.uid), user).then((resp) => {
-
-        this.sweetAlertService.Toast.fire({
-          icon: 'success',
-          title: 'Creado correctamente'
-        })
-
-        this.loading = false;
-
-        this.router.navigateByUrl('/protected/admin/users/list');
-
-      }).catch((error) => {
-
-        this.sweetAlertService.Toast.fire({
-          icon: 'error',
-          title: 'Creación Fallida'
-        })
-
-        this.loading = false;
-
-      });
-
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorMessage);
-      this.sweetAlertService.Toast.fire({
-        icon: 'error',
-        title: 'Creación Fallida'
-      })
-
-      this.loading = false;
-    });
   }
 
   async getUser(uid:string){
@@ -246,12 +146,16 @@ export class FirestoreService {
 
     this.loading = true;
 
+    newObject["timestamp"] = serverTimestamp();
+
     await addDoc(collection(this.initService.db, document), newObject).then((docRef) => {
 
       this.sweetAlertService.Toast.fire({
         icon: 'success',
         title: 'Guardado correctamente'
       })
+
+      this.pdfService.generatePdf(newObject);
 
       this.loading = false;
 

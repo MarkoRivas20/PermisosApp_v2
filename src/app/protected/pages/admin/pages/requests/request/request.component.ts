@@ -55,7 +55,8 @@ export class RequestComponent implements OnInit{
   AccessSystemForm = this._formBuilder.group({
     accessSystem: ["false", Validators.required],
     systems: this._formBuilder.group({
-      besterp: [false]
+      besterp: [false],
+      radar: [false]
     }),
     accessSystemJustification: [null],
   });

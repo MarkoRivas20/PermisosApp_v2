@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { UsersRoutingModule } from './users-routing.module';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,23 +7,18 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-
-import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import { ListRequestComponent } from './pages/requests/list-request/list-request.component';
-import { RequestComponent } from './pages/requests/request/request.component';
-
-import {NgxPrintModule} from 'ngx-print';
-
-
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [
-    RequestComponent,
-    ListRequestComponent
-  ],
+  declarations: [],
   imports: [
-    CommonModule,
-    UsersRoutingModule,
+    CommonModule
+  ],
+  exports: [
     MatStepperModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -33,9 +26,11 @@ import {NgxPrintModule} from 'ngx-print';
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxPrintModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
-export class UsersModule { }
+export class AngularMaterialModule { }

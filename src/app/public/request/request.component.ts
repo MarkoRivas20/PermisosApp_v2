@@ -1,17 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {collection, addDoc  } from "firebase/firestore";
-import * as moment from 'moment';
-import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FirestoreService } from 'src/app/protected/services/firestore.service';
 import { LocalService } from 'src/app/protected/services/local.service';
 import { PdfService } from 'src/app/protected/services/pdf.service';
 import { SweetalertService } from 'src/app/protected/services/sweetalert.service';
-import { InitializeService } from 'src/app/services/initialize.service';
-import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-request',
@@ -21,16 +16,17 @@ import Swal from 'sweetalert2';
 export class RequestComponent implements OnInit{
 
   dateNow: string = "";
-  enabled: boolean = true;
-  created: boolean = false;
-  status: string = "";
   loading: boolean = true;
-  Request: any = {}
   ip: string = "";
 
   get loadingButton(){
 
     return this.fireService.loading;
+  }
+
+  get loadingPage(){
+
+    return this.authService._loading;
   }
 
   profileForm = this._formBuilder.group({
@@ -48,8 +44,7 @@ export class RequestComponent implements OnInit{
   });
 
   observationForm = this._formBuilder.group({
-    applicantObservation: [null],
-    tiObservation: [null],
+    applicantObservation: [null]
   });
 
   computerInfoForm = this._formBuilder.group({
@@ -61,7 +56,8 @@ export class RequestComponent implements OnInit{
   AccessSystemForm = this._formBuilder.group({
     accessSystem: ["false", Validators.required],
     systems: this._formBuilder.group({
-      besterp: [false]
+      besterp: [false],
+      radar: [false]
     }),
     accessSystemJustification: [null, Validators.required],
   });
@@ -157,9 +153,7 @@ export class RequestComponent implements OnInit{
       value: 'Tacna',
       viewValue: 'Agencia de Tacna',
       offices: [
-        {value: 'Caja', viewValue: 'Caja'},
-        {value: 'Créditos', viewValue: 'Créditos'},
-        {value: 'Agencia', viewValue: 'Jefe de Agencia'}
+        {value: 'Información', viewValue: 'Información'}
       ]
     }
   ];
@@ -171,89 +165,34 @@ export class RequestComponent implements OnInit{
 
   constructor(private _formBuilder: FormBuilder,
               private authService: AuthService,
-              private router: Router,
-              private activateRoute: ActivatedRoute,
               private fireService: FirestoreService,
               private localService: LocalService,
-              private sweetalertService: SweetalertService,
-              private pdfService: PdfService) {
+              private sweetalertService: SweetalertService,) {
 
-
-  }
+                authService.SignInAnonimously();
+              }
 
   ngOnInit(): void {
 
-    this.profileForm.controls['name'].disable();
-    this.profileForm.controls['document'].disable();
-    this.profileForm.controls['job'].disable();
+
     this.officeInfoForm.controls['office'].disable();
     this.AccessSystemForm.controls['systems'].disable();
     this.AccessSystemForm.controls['accessSystemJustification'].disable();
     this.InternetForm.controls['internetJustification'].disable();
 
     moment.locale('es-MX');
-    this.dateNow = moment().format('L') + " " + moment().format('LT');
+    this.dateNow = moment().format('L');
 
-    if(this.router.url.includes('edit')){
+    this.localService.getMyIP ((localIp:any) => {
 
-      this.activateRoute.params.pipe(switchMap(({id}) => this.fireService.getRequest(id))
-      ).subscribe((request: any) => {
-
-        this.Request = request;
-
-        if(request.uidUser != this.authService.User.uid){
-
-          this.router.navigateByUrl('/protected/user/requests/list');
-
-        }
-
-        this.profileForm.disable();
-        this.officeInfoForm.disable();
-        this.observationForm.disable();
-        this.computerInfoForm.disable();
-        this.AccessSystemForm.disable();
-        this.InternetForm.disable();
-
-        this.profileForm.reset(request);
-        this.officeInfoForm.reset(request);
-        this.observationForm.reset(request);
-        this.computerInfoForm.reset(request);
-        this.AccessSystemForm.reset(request);
-        this.InternetForm.reset(request);
-
-        this.dateNow = request.date;
-
-        this.created = true;
-
-        this.status = request.status;
-
-        this.loading = false;
-
-        //this.myForm.controls['username'].disable();
-
-      })
-    }
-    else{
-
-      this.profileForm.reset({
-        name: this.authService.User.firstName + " " + this.authService.User.lastName,
-        document: this.authService.User.document,
-        job: this.authService.User.job
+      this.computerInfoForm.controls['ip'].disable();
+      this.computerInfoForm.reset({
+        ip: localIp
       });
+      this.ip = localIp;
+    });
 
-
-
-      this.localService.getMyIP ((localIp:any) => {
-
-        this.computerInfoForm.controls['ip'].disable();
-        this.computerInfoForm.reset({
-          ip: localIp
-        });
-        this.ip = localIp;
-      });
-
-      this.loading = false;
-    }
+    this.loading = false;
 
     this.officeInfoForm.controls['location'].valueChanges.subscribe((value) => {
       this.changeOffice(value);
@@ -301,27 +240,21 @@ export class RequestComponent implements OnInit{
 
   async sendInfo(){
 
+    const dateNow = moment().format('L') + " " + moment().format('LT');
     const today = new Date();
     const dateTime = today.getFullYear()+""+(today.getMonth()+1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes()+""+today.getSeconds();
 
-
     const newRequest = Object.assign(
-      {
-        name: this.authService.User.firstName + " " + this.authService.User.lastName,
-        document: this.authService.User.document,
-        job: this.authService.User.job,
-        ip: this.ip
-      },
       {...this.profileForm.value},
       {...this.officeInfoForm.value},
       {...this.observationForm.value},
       {...this.computerInfoForm.value},
       {...this.AccessSystemForm.value},
       {...this.InternetForm.value},{
-        uidUser: this.authService.User.uid,
-        date: this.dateNow,
+        date: dateNow,
         status: 'Pendiente',
-        code: dateTime
+        code: dateTime,
+        ip: this.ip
       });
 
 
@@ -353,17 +286,8 @@ export class RequestComponent implements OnInit{
 
   }
 
-  generatePDF(){
-
-    this.pdfService.generatePdf(this.Request);
-  }
-
   changeOffice(count: any) {
     this.offices = this.locations.find(con => con.value == count).offices;
   }
-
-
-
-
 
 }
