@@ -1,12 +1,14 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, LOCALE_ID, Inject} from '@angular/core';
 import { FormBuilder, FormControl  } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FirestoreService } from 'src/app/protected/services/firestore.service';
 import { SweetalertService } from 'src/app/protected/services/sweetalert.service';
+import { formatDate } from '@angular/common';
 import { jsPDF } from "jspdf";
 import 'jspdf-autotable';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-request',
@@ -26,7 +28,8 @@ export class ListRequestComponent implements OnInit, AfterViewInit{
   search: string = '';
   resultsLength = 0;
   inSearch: boolean = false;
-  filteredData: any[] = []
+  filteredData: any[] = [];
+  Datenow: Date = new Date();
 
   range = this.fb.group({
     start: new FormControl<Date | null>(null),
@@ -35,7 +38,8 @@ export class ListRequestComponent implements OnInit, AfterViewInit{
 
   constructor(private fb: FormBuilder,
               private fireService: FirestoreService,
-              private sweetService: SweetalertService){
+              private sweetService: SweetalertService,
+              @Inject(LOCALE_ID) public locale: string){
 
 
               }
@@ -110,37 +114,86 @@ export class ListRequestComponent implements OnInit, AfterViewInit{
 
   }
 
-  generateReport(){
+  generateReport(title: string){
 
-    var doc = new jsPDF('p', 'pt', 'a4');
+    this.Datenow = new Date();
+
+    var doc = new jsPDF('p', 'mm', 'a4');
     var pageHeight = 0;
     pageHeight = doc.internal.pageSize.height;
-    doc.setLineWidth(2);
 
+    const img = new Image;
+    img.crossOrigin = "";
+    img.src = "assets/images/logo.png";
+    doc.addImage(img, 'PNG', 20, 10, 35, 10);
+
+    doc.text(title, 104, 37, {align: 'center'});
+
+    doc.setFontSize(11);
+    doc.setFont("Arial","bold");
+    doc.text("Fecha: ", 160, 15, {align: 'right'});
+
+    doc.setFont("Arial","normal");
+    doc.text(formatDate(Date.now(),'dd/MM/YYYY HH:ss',this.locale), 190, 15, {align: 'right'});
+
+    doc.setLineWidth(2);
     //@ts-ignore
     doc.autoTable({
         html: '#simple_table',
-        startY: 70,
+        startY: 50,
         theme: 'striped',
         columnStyles: {
             0: {
-                cellWidth: 130,
+                cellWidth: 40,
             },
             1: {
-                cellWidth: 180,
+                cellWidth: 75,
             },
             2: {
-                cellWidth: 80,
+                cellWidth: 25,
             },
             3: {
-              cellWidth: 130,
+              cellWidth: 40,
             }
         },
         styles: {
-            minCellHeight: 10
+            minCellHeight: 5
         }
     })
     doc.save('Marks_Of_Students.pdf');
+  }
+
+  async showDialog(){
+
+    const inputValue = '';
+
+    const { value: title } = await Swal.fire({
+      title: 'Reportes',
+      input: 'text',
+      inputLabel: 'Ingrese el título del reporte',
+      inputValue: inputValue,
+      showCancelButton: true,
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value && value.length < 65) {
+            resolve('')
+          } else {
+            resolve('Ingrese un nombre válido menor a 50 caracteres')
+          }
+        })
+      }
+    })
+
+    if (title) {
+
+      this.sweetService.ShowConfirmReport();
+
+      this.generateReport(title)
+
+    }
+
   }
 
 }

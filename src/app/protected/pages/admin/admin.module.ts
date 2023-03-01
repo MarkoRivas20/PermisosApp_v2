@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,8 @@ import { AngularMaterialModule } from 'src/app/angular-material/angular-material
     AngularMaterialModule
   ],
   providers:[
-    AngularMaterialModule
+    AngularMaterialModule,
+    DatePipe
   ]
 })
 export class AdminModule { }

@@ -22,10 +22,8 @@ export class PdfService {
     img.src = "assets/images/logo.png";
     doc.addImage(img, 'PNG', 20, 10, 35, 10);
 
-    doc.text("Solicitud para Actualización de Usuario", 104, 32, {align: 'center'});
-    doc.text("y Acceso a Internet", 104, 42, {align: 'center'});
-    doc.line(54,33,154,33);
-    doc.line(79,43,129,43);
+    doc.text("Solicitud para Acesso a Sistemas e Internet", 104, 37, {align: 'center'});
+    doc.line(48,38,160,38);
 
     doc.setFontSize(11);
     doc.setFont("Arial","bold");
@@ -36,92 +34,92 @@ export class PdfService {
 
     doc.setFont("Arial","bold");
     doc.setFillColor(0, 6, 88);
-    doc.circle(22, 58.7, 2, "F");
+    doc.circle(22, 53.7, 2, "F");
     doc.setTextColor(255, 255, 255)
-    doc.text("1", 21, 60, {align: 'left'});
+    doc.text("1", 21, 55, {align: 'left'});
     doc.setTextColor(0, 0, 0)
-    doc.text("Datos Personales", 25, 60, {align: 'left'});
-    doc.line(24.5,61,54,61);
+    doc.text("Datos Personales", 25, 55, {align: 'left'});
+    doc.line(24.5,56,54,56);
 
-    doc.text("DNI:", 25, 67, {align: 'left'});
-    doc.text("Nombre completo:",105, 67, {align: 'left'});
-    doc.text("Tipo de contrato:", 25, 81, {align: 'left'});
-    doc.text("Cargo:", 25, 74, {align: 'left'});
-    doc.text("Celular:", 105, 74, {align: 'left'});
-    doc.text("Email:", 105, 81, {align: 'left'});
+    doc.text("DNI:", 25, 62, {align: 'left'});
+    doc.text("Nombre completo:",105, 62, {align: 'left'});
+    doc.text("Tipo de contrato:", 25, 76, {align: 'left'});
+    doc.text("Cargo:", 25, 69, {align: 'left'});
+    doc.text("Celular:", 105, 69, {align: 'left'});
+    doc.text("Email:", 105, 76, {align: 'left'});
 
     doc.setFont("Arial","normal");
-    doc.text(String(Request.document), 34, 67, {align: 'left'});
-    doc.text(String(Request.name), 137.5, 67, {align: 'left'});
-    doc.text(String(Request.typeContract), 55, 81, {align: 'left'});
-    doc.text(String(Request.job), 37.5, 74, {align: 'left'});
-    doc.text(String(Request.cellphone), 120, 74, {align: 'left'});
-    doc.text(String(Request.email), 117, 81, {align: 'left'});
+    doc.text(String(Request.document), 34, 62, {align: 'left'});
+    doc.text(String(Request.name), 137.5, 62, {align: 'left'});
+    doc.text(String(Request.typeContract), 55, 76, {align: 'left'});
+    doc.text(String(Request.job), 37.5, 69, {align: 'left'});
+    doc.text(String(Request.cellphone), 120, 69, {align: 'left'});
+    doc.text(String(Request.email), 117, 76, {align: 'left'});
 
     doc.setFont("Arial","bold");
     doc.setFillColor(0, 6, 88);
-    doc.circle(22, 88.7, 2, "F");
+    doc.circle(22, 84.7, 2, "F");
     doc.setTextColor(255, 255, 255)
-    doc.text("2", 21, 90, {align: 'left'});
+    doc.text("2", 21, 86, {align: 'left'});
     doc.setTextColor(0, 0, 0)
 
-    doc.text("Información de Oficina", 25, 90, {align: 'left'});
-    doc.line(24.5,91,64.5,91);
-    doc.text("Ubicación:", 25, 97, {align: 'left'});
-    doc.text("Unidad/Oficina/Area:", 105, 97, {align: 'left'});
+    doc.text("Información de Oficina", 25, 86, {align: 'left'});
+    doc.line(24.5,87,64.5,87);
+    doc.text("Ubicación:", 25, 93, {align: 'left'});
+    doc.text("Unidad/Oficina/Area:", 105, 93, {align: 'left'});
 
     doc.setFont("Arial","normal");
-    doc.text(String(Request.location), 44, 97, {align: 'left'});
-    doc.text(String(Request.office), 144, 97, {align: 'left'});
+    doc.text(String(Request.location), 44, 93, {align: 'left'});
+    doc.text(String(Request.office), 144, 93, {align: 'left'});
 
     doc.setFont("Arial","bold");
     doc.setFillColor(0, 6, 88);
-    doc.circle(22, 104.7, 2, "F");
+    doc.circle(22, 101.7, 2, "F");
     doc.setTextColor(255, 255, 255)
-    doc.text("3", 21, 106, {align: 'left'});
+    doc.text("3", 21, 103, {align: 'left'});
     doc.setTextColor(0, 0, 0)
 
-    doc.text("Observaciones", 25, 106, {align: 'left'});
-    doc.line(24.5,107,50,107);
-    doc.text("Observaciones del solicitante:", 25, 113, {align: 'left'});
+    doc.text("Observaciones", 25, 103, {align: 'left'});
+    doc.line(24.5,104,50,104);
+    doc.text("Observaciones del solicitante:", 25, 110, {align: 'left'});
 
-    doc.rect(25,115,160,21.5);
+    doc.rect(25,112,160,21.5);
     doc.setFont("Arial","normal");
-    doc.text(String(Request.applicantObservation || ""), 26, 120, {align: 'left', maxWidth: 159});
-
-
-    doc.setFont("Arial","bold");
-    doc.setFillColor(0, 6, 88);
-    doc.circle(22, 142.7, 2, "F");
-    doc.setTextColor(255, 255, 255)
-    doc.text("4", 21, 144, {align: 'left'});
-    doc.setTextColor(0, 0, 0)
-
-    doc.text("Datos de Equipo", 25, 144, {align: 'left'});
-    doc.line(24.5,145,53.5,145);
-    doc.text("Nombre de equipo:", 25, 151, {align: 'left'});
-    doc.text("Dirección IP:", 25, 158, {align: 'left'});
-    doc.text("Tipo de Equipo:", 25, 165, {align: 'left'});
-
-    doc.setFont("Arial","normal");
-    doc.text(String(Request.computerName), 58, 151, {align: 'left'});
-    doc.text(String(Request.ip), 48, 158, {align: 'left'});
-    doc.text(String(Request.typeComputer), 53, 165, {align: 'left'});
+    doc.text(String(Request.applicantObservation || ""), 26, 117, {align: 'left', maxWidth: 159});
 
 
     doc.setFont("Arial","bold");
     doc.setFillColor(0, 6, 88);
-    doc.circle(22, 170.7, 2, "F");
+    doc.circle(22, 140.7, 2, "F");
     doc.setTextColor(255, 255, 255)
-    doc.text("5", 21, 172, {align: 'left'});
+    doc.text("4", 21, 142, {align: 'left'});
     doc.setTextColor(0, 0, 0)
 
-    doc.text("Acceso a Sistemas", 25, 172, {align: 'left'});
-    doc.line(24.5,173,55.5,173);
+    doc.text("Datos de Equipo", 25, 142, {align: 'left'});
+    doc.line(24.5,143,53.5,143);
+    doc.text("Nombre de equipo:", 25, 149, {align: 'left'});
+    doc.text("Dirección IP:", 25, 156, {align: 'left'});
+    doc.text("Tipo de Equipo:", 25, 163, {align: 'left'});
+
+    doc.setFont("Arial","normal");
+    doc.text(String(Request.computerName), 58, 149, {align: 'left'});
+    doc.text(String(Request.ip), 48, 156, {align: 'left'});
+    doc.text(String(Request.typeComputer), 53, 163, {align: 'left'});
+
+
+    doc.setFont("Arial","bold");
+    doc.setFillColor(0, 6, 88);
+    doc.circle(22, 169.7, 2, "F");
+    doc.setTextColor(255, 255, 255)
+    doc.text("5", 21, 171, {align: 'left'});
+    doc.setTextColor(0, 0, 0)
+
+    doc.text("Acceso a Sistemas", 25, 171, {align: 'left'});
+    doc.line(24.5,172,55.5,172);
     doc.setFont("Arial","normal");
     if(Request.accessSystem == "false"){
 
-      doc.text("No requiero acceso a ningún sistema", 25, 180, {align: 'left'});
+      doc.text("No requiero acceso a ningún sistema", 25, 179, {align: 'left'});
     }else{
 
       let systems = "";
@@ -132,15 +130,15 @@ export class PdfService {
         }
       }
 
-      doc.text("Si requiero acceso a los siguientes sistemas: " + systems, 25, 180, {align: 'left', maxWidth: 160});
+      doc.text("Si requiero acceso a los siguientes sistemas: " + systems, 25, 179, {align: 'left', maxWidth: 160});
 
       doc.setFont("arial","bold");
-      doc.text("Justificación de acceso a sistemas:", 25, 186, {align: 'left'});
+      doc.text("Justificación de acceso a sistemas:", 25, 185, {align: 'left'});
 
-      doc.rect(25,187,160,19);
+      doc.rect(25,186,160,19);
 
       doc.setFont("Arial","normal");
-      doc.text(String(Request.accessSystemJustification || ""), 26, 191, {align: 'left', maxWidth: 159});
+      doc.text(String(Request.accessSystemJustification || ""), 26, 190, {align: 'left', maxWidth: 159});
 
     }
 

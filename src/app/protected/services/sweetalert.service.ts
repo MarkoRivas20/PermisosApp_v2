@@ -59,5 +59,15 @@ export class SweetalertService {
     })
   }
 
+  ShowConfirmReport(){
+
+    Swal.fire({
+      icon: 'success',
+      title: '<strong>¡Excelente!</strong>',
+      html:
+        'Se esta generando el reporte <br> <small>Este proceso puede tardar unos minutos</small>',
+    })
+  }
+
 
 }
