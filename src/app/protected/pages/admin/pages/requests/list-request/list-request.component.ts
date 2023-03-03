@@ -160,7 +160,7 @@ export class ListRequestComponent implements OnInit, AfterViewInit{
             minCellHeight: 5
         }
     })
-    doc.save('Marks_Of_Students.pdf');
+    doc.save('Reporte '+this.Datenow.getTime()+'.pdf');
   }
 
   async showDialog(){
