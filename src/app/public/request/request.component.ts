@@ -185,11 +185,14 @@ export class RequestComponent implements OnInit{
 
     this.localService.getMyIP ((localIp:any) => {
 
-      this.computerInfoForm.controls['ip'].disable();
-      this.computerInfoForm.reset({
-        ip: localIp
-      });
-      this.ip = localIp;
+      if(localIp != 'unavailable'){
+        this.computerInfoForm.controls['ip'].disable();
+        this.computerInfoForm.reset({
+          ip: localIp
+        });
+        this.ip = localIp;
+      }
+
     });
 
     this.loading = false;

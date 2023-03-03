@@ -8,6 +8,29 @@ export class PdfService {
 
   constructor() { }
 
+  offices = [
+    {value: 'Riesgos', viewValue: 'Subgerencia de Riesgos'},
+    {value: 'Recuperaciones', viewValue: 'Subgerencia de Recuperaciones'},
+    {value: 'Contabilidad', viewValue: 'Contabilidad'},
+    {value: 'Operaciones', viewValue: 'Subgerencia de Operaciones'},
+    {value: 'Negocios', viewValue: 'Subgerencia de Negocios'},
+    {value: 'Logística', viewValue: 'Logística'},
+    {value: 'Créditos', viewValue: 'Créditos'},
+    {value: 'Caja', viewValue: 'Caja'},
+    {value: 'Agencia', viewValue: 'Jefe de Agencia'},
+    {value: 'Legal', viewValue: 'Asesoría Legal'},
+    {value: 'Mesa', viewValue: 'Mesa de Partes'},
+    {value: 'Auditoría', viewValue: 'Auditoría'},
+    {value: 'Seguros', viewValue: 'Seguros'},
+    {value: 'RRHH', viewValue: 'Recursos Humanos'},
+    {value: 'Informática', viewValue: 'Subgerencia de Informática'},
+    {value: 'Consejo', viewValue: 'Consejo de Administración'},
+    {value: 'Comite', viewValue: 'Comité de Educación'},
+    {value: 'Cumplimiento', viewValue: 'Oficial de Cumplimiento'},
+    {value: 'Administración', viewValue: 'Administración'},
+    {value: 'Gerencia', viewValue: 'Gerencia General'}
+  ]
+
   generatePdf(Request: any){
 
     console.log(Request)
@@ -70,7 +93,10 @@ export class PdfService {
 
     doc.setFont("Arial","normal");
     doc.text(String(Request.location), 44, 93, {align: 'left'});
-    doc.text(String(Request.office), 144, 93, {align: 'left'});
+
+    const obj = this.offices.find(office => office.value === Request.office);
+
+    doc.text(String(obj?.viewValue), 144, 93, {align: 'left'});
 
     doc.setFont("Arial","bold");
     doc.setFillColor(0, 6, 88);
