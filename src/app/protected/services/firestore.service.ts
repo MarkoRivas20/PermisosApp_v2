@@ -133,10 +133,7 @@ export class FirestoreService {
         this.loading = false;
       }).catch(() => {
 
-        this.sweetAlertService.Toast.fire({
-          icon: 'error',
-          title: 'Actualización fallida'
-        })
+        this.sweetAlertService.showError('Actualización fallida');
 
         this.loading = false;
       });
@@ -163,10 +160,8 @@ export class FirestoreService {
 
     }).catch((error) => {
 
-      this.sweetAlertService.Toast.fire({
-        icon: 'error',
-        title: 'Error al guardar la información'
-      })
+
+      this.sweetAlertService.showError('Error al guardar la información');
 
       this.loading = false;
 

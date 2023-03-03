@@ -18,6 +18,8 @@ export class RequestComponent implements OnInit{
   dateNow: string = "";
   loading: boolean = true;
   ip: string = "";
+  showDialog: boolean = false;
+  checked: boolean = false;
 
   get loadingButton(){
 
@@ -260,7 +262,6 @@ export class RequestComponent implements OnInit{
         ip: this.ip
       });
 
-
     if(this.profileForm.valid &&
       this.officeInfoForm.valid &&
       this.computerInfoForm.valid &&
@@ -270,9 +271,13 @@ export class RequestComponent implements OnInit{
 
         await this.fireService.saveDocument("requests", newRequest);
 
+        this.showDialog = false;
         this.sweetalertService.ShowConfirmDialog(newRequest);
+
     }
     else{
+
+      this.showDialog = false;
 
       this.sweetalertService.Toast.fire({
         icon: 'error',
@@ -284,6 +289,8 @@ export class RequestComponent implements OnInit{
       this.computerInfoForm.markAllAsTouched()
       this.AccessSystemForm.markAllAsTouched()
       this.InternetForm.markAllAsTouched()
+
+
 
     }
 

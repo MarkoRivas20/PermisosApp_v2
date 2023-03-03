@@ -278,22 +278,11 @@
 
                   <mat-step>
                     <ng-template matStepLabel>Hecho</ng-template>
-                    <p>¡Bien hecho! Ya termino todos los pasos.</p>
-                    <div>
+                    <p>¡Bien hecho! Ya casi termina todos los pasos.</p>
+                    <div class="mt-4">
                       <button mat-button matStepperPrevious>Atras</button>
-                      <button mat-raised-button color="primary" (click)="sendInfo()" class="w-12" [disabled]="loadingButton">
-                        <div
-                        *ngIf="loadingButton else page"
-                        class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-gray-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                        role="status">
-                        <span
-                          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                          >Cargando...</span
-                        >
-                      </div>
-                      <ng-template #page>
+                      <button mat-raised-button color="primary" (click)="showDialog=true" class="w-12" >
                         Enviar
-                      </ng-template>
                       </button>
                     </div>
                   </mat-step>
@@ -309,6 +298,85 @@
     </main>
   </div>
 
+</div>
+
+<div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" *ngIf="showDialog">
+
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+  <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+
+            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+              <i class="fa-solid fa-triangle-exclamation text-xl text-indigo-700"></i>
+            </div>
+
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Tratamiento de Datos Personales</h3>
+              <div class="mt-2 pr-12">
+                <p class="text-sm text-gray-500 text-justify">De conformidad con la Ley N° 29733, Ley de Protección de Datos Personales y su norma reglamentaria
+                  D.S. y N° 003-2013-JUS en los términos vigentes de ambas, desde el momento que Ud. haya declarado la aceptación expresa del
+                  tratamiento de sus datos personales mediante la realización de cliqueo dispuesto para la autorización mencionada, Ud. autoriza
+                  a Cooperativa de Ahorro y Crédito Cuajone – Coopac Cuajone, ubicada en calle Piura Nro. 299 – Moquegua, Mariscal Nieto, Moquegua,
+                  que todos los datos personales suyos facilitados o que se faciliten a través de su ingreso al portal o por cualquier medio sean
+                  recolectados y tratados por Cooperativa de Ahorro y Crédito Cuajone – Coopac Cuajone. Adicionalmente, se entenderá que el usuario
+                  y/o visitante del portal consiente el tratamiento de sus datos personales si mediante su conducta se evidencia que ha consentido
+                  inequívocamente el tratamiento de sus datos brindados en el Portal, conforme a lo permitido en el artículo 12° numeral 3 del
+                  Reglamento de la Ley de Protección de datos personales. El usuario y/o visitante del portal consiente expresamente que
+                  Cooperativa de Ahorro y Crédito Cuajone – Coopac Cuajone, pueda ceder los datos personales a terceros tales como Google en los
+                  términos y condiciones anteriormente indicados. El Usuario presta su consentimiento para que se puedan transferir sus datos en
+                  los términos y condiciones anteriormente indicados, a otras entidades con destino a un país extranjero. Los datos personales
+                  serán incorporados a un servicio administrado para almacenar datos no estructurados propiedad de Google. Sus datos serán
+                  utilizados para los permisos de acceso a los sistemas internos e internet de Cooperativa de Ahorro y Crédito Cuajone –
+                  Coopac Cuajone. Los datos se mantendrán en la base de datos mientras se consideren útiles con el fin de poder tener un registro
+                  y poder comunicarse con el usuario según fuese necesario. El Usuario autoriza a Cooperativa de Ahorro y Crédito Cuajone –
+                  Coopac Cuajone a conservar sus datos una vez finalizada la relación contractual, para el cumplimiento de las obligaciones
+                  legales pertinentes. En cuanto entre en vigencia las disposiciones pertinentes de la Ley N° 29733, al Usuario le asiste de
+                  ejercer los derechos de acceso, rectificación, oposición y cancelación de los datos personales, los cuales podrá ejercer
+                  mediante la opción de contacto que ponemos a su disposición. El usuario responde de la veracidad de los datos facilitados por el,
+                  reservándose Cooperativa de Ahorro y Crédito Cuajone – Coopac Cuajone el derecho a excluirlo, imponer las sanciones o realizar
+                  las denuncias respectivas, en caso de constatar la falsedad o inexactitud de los mismos. Cooperativa de Ahorro y Crédito Cuajone
+                  – Coopac Cuajone ha adoptado los niveles de seguridad de protección de los Datos Personales legalmente requeridos. No obstante,
+                  el Usuario debe ser consciente de que dichas medidas en Internet no son inexpugnables.</p>
+              </div>
+
+              <div class="flex items-center">
+                <mat-checkbox class="example-margin" color="primary" [(ngModel)]="checked"></mat-checkbox>
+                <span class="text-gray-700">Acepto el tratamiento de mis datos personales</span>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-medium text-white shadow-sm sm:ml-3 sm:w-auto w-32" [ngClass]="{'bg-indigo-600 hover:bg-indigo-500': checked, 'bg-gray-300 hover:bg-gray-300/80': (!checked || loadingButton)}" (click)="sendInfo()" [disabled]="!checked || loadingButton">
+
+            <div
+            *ngIf="loadingButton else page"
+            class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-gray-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status">
+            <span
+              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+              >Cargando...</span
+            >
+            </div>
+            <ng-template #page>
+              <div class="flex items-center">
+                <span>Continuar</span>
+                <i class="fa-solid fa-arrow-right ml-4"></i>
+              </div>
+            </ng-template>
+          </button>
+          <button class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" (click)="showDialog=false" [disabled]="loadingButton">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
